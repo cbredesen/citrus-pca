@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "flc-file-include/file-include",
+  "version": "1.0.0",
+  "title": "File Include",
+  "category": "embed",
+  "icon": "media-code",
+  "description": "Include an HTML file from the configured directory.",
+  "keywords": [ "html", "file", "include", "embed" ],
+  "attributes": {
+    "mode": {
+      "type": "string",
+      "default": "latest"
+    },
+    "selectedFile": {
+      "type": "string",
+      "default": ""
+    },
+    "showRawLink": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "supports": {
+    "html": false,
+    "color": false
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css"
+}

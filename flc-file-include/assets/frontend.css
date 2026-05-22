@@ -1,0 +1,27 @@
+/*
+ * Scoped styles for included HTML content.
+ * Goal: prevent the active theme from bleeding unwanted colors and hover states
+ * into the included file's markup, without fully resetting everything.
+ */
+
+.flc-file-include-content {
+	color: initial;
+	box-sizing: border-box;
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+.flc-file-include-content a {
+	color: revert;
+}
+
+/* Hard-block theme hover rules on table rows and cells. */
+.flc-file-include-content table tr:hover,
+.flc-file-include-content table td:hover,
+.flc-file-include-content table th:hover,
+.flc-file-include-content table tr:hover td,
+.flc-file-include-content table tr:hover th {
+	color: initial !important;
+	background-color: initial !important;
+	background: initial !important;
+}

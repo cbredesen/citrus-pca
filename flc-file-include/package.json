@@ -1,0 +1,16 @@
+{
+  "name": "flc-file-include",
+  "version": "1.0.0",
+  "description": "WordPress Gutenberg block to include HTML files from the filesystem.",
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "lint:js": "wp-scripts lint-js",
+    "lint:css": "wp-scripts lint-style",
+    "packages-update": "wp-scripts packages-update",
+    "plugin:zip": "npm run build && cd .. && zip -r flc-file-include.zip flc-file-include -x 'flc-file-include/node_modules/*' -x 'flc-file-include/src/*' -x 'flc-file-include/.git/*' -x 'flc-file-include/.claude/*' -x 'flc-file-include/CLAUDE.md' -x 'flc-file-include/.gitignore' -x 'flc-file-include/package*.json'"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^30.0.0"
+  }
+}

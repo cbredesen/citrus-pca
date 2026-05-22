@@ -1,0 +1,16 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "flc-anniversaries/anniversaries",
+  "version": "1.0.0",
+  "title": "FLC Anniversaries",
+  "category": "widgets",
+  "icon": "groups",
+  "description": "Displays club member milestone anniversaries for the current month.",
+  "keywords": [ "anniversaries", "anniversary", "club", "members" ],
+  "supports": {
+    "html": false
+  },
+  "editorScript": "file:./index.js",
+  "style": "file:./style-index.css"
+}

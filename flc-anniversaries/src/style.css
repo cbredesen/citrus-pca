@@ -1,0 +1,71 @@
+.flc-anniversaries {
+	margin: 0;
+}
+
+.flc-anniversaries-nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1em;
+	margin-bottom: 1.5em;
+}
+
+.flc-anniversaries-month {
+	font-size: 1.4em;
+	font-weight: 700;
+	text-align: center;
+	flex: 1;
+}
+
+.flc-anniversaries-nav-btn {
+	display: inline-block;
+	padding: 0.35em 0.9em;
+	border: 1px solid currentColor;
+	border-radius: 4px;
+	text-decoration: none;
+	white-space: nowrap;
+	opacity: 0.8;
+}
+
+.flc-anniversaries-nav-btn:hover {
+	opacity: 1;
+}
+
+.flc-anniversary-group {
+	margin-bottom: 2em;
+}
+
+.flc-anniversary-heading {
+	border-bottom: 2px solid currentColor;
+	padding-bottom: 0.25em;
+	margin-bottom: 0.6em;
+}
+
+.flc-anniversary-names {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	columns: 2;
+	column-gap: 2em;
+}
+
+.flc-anniversary-names li {
+	break-inside: avoid;
+	padding: 0.2em 0;
+}
+
+@media (min-width: 600px) {
+	.flc-anniversary-names {
+		columns: 3;
+	}
+}
+
+@media (min-width: 900px) {
+	.flc-anniversary-names {
+		columns: 4;
+	}
+}
+
+.flc-anniversaries-none {
+	font-style: italic;
+}

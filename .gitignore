@@ -1,0 +1,16 @@
+bin/.env
+
+# Dependencies
+node_modules/
+
+# Compiled assets (run `npm run build` to regenerate)
+build/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Editor/tool settings
+.claude/
