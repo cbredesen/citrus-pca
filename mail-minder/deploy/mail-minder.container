@@ -1,0 +1,43 @@
+# Podman Quadlet unit for mail-minder
+#
+# Install (rootless, per-user service):
+#   mkdir -p ~/.config/containers/systemd
+#   cp mail-minder.container ~/.config/containers/systemd/
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now mail-minder
+#
+# Logs:
+#   journalctl --user -u mail-minder -f
+#
+# Update after rebuilding the image:
+#   systemctl --user restart mail-minder
+
+[Unit]
+Description=mail-minder — calendar reminders and email templates
+After=network-online.target
+
+[Container]
+Image=localhost/mail-minder:latest
+
+PublishPort=3000:3000
+
+# All config lives in an env file so secrets never appear in unit files.
+# Create this file before starting the service:
+#   mkdir -p ~/.config/mail-minder
+#   echo 'ICAL_URLS=https://...' >> ~/.config/mail-minder/env
+#   echo 'PORT=3000'             >> ~/.config/mail-minder/env
+EnvironmentFile=%h/.config/mail-minder/env
+
+# Persist the SQLite database across container restarts.
+Volume=%h/mail-minder/data:/app/data:Z
+
+# Mount your local templates directory to use custom .mjml files.
+# Remove this line to use the templates baked into the image.
+Volume=%h/mail-minder/templates:/app/templates:Z
+
+[Service]
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=default.target

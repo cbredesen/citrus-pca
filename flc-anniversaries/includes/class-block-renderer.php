@@ -59,57 +59,18 @@ class FLC_Anniversaries_Block_Renderer {
 	 */
 	private static function load_milestones( int $month, int $year ) {
 		$csv_path = flc_anniversaries_get_csv_path();
+		$result   = FLC_Anniversaries_Roster_Parser::parse( $csv_path, $month, $year );
 
-		if ( ! file_exists( $csv_path ) ) {
+		// Key 0 = file-level error (not found / unreadable).
+		if ( isset( $result['errors'][0] ) ) {
 			return '<p class="flc-anniversaries-none">Anniversary data not found.</p>';
 		}
 
-		$handle = fopen( $csv_path, 'r' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
-		if ( ! $handle ) {
-			return '<p class="flc-anniversaries-none">Unable to read anniversary data.</p>';
+		// Row-level errors: log each one but keep rendering with whatever is valid.
+		foreach ( $result['errors'] as $message ) {
+			trigger_error( esc_html( $message ), E_USER_WARNING ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error
 		}
 
-		fgetcsv( $handle, 0, ',', '"', '' ); // skip header
-
-		$milestones = [];
-
-		while ( ( $row = fgetcsv( $handle, 0, ',', '"', '' ) ) !== false ) { // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
-			if ( count( $row ) < 2 ) {
-				continue;
-			}
-
-			$name     = trim( $row[0] );
-			$date_str = trim( $row[1] );
-
-			if ( empty( $name ) || empty( $date_str ) ) {
-				continue;
-			}
-
-			$date = DateTime::createFromFormat( 'n/j/Y', $date_str );
-			if ( ! $date ) {
-				continue;
-			}
-
-			$join_month = (int) $date->format( 'n' );
-			$join_year  = (int) $date->format( 'Y' );
-
-			if ( $join_month !== $month ) {
-				continue;
-			}
-
-			$years = $year - $join_year;
-
-			if ( $years <= 0 || $years % 5 !== 0 ) {
-				continue;
-			}
-
-			$milestones[ $years ][] = $name;
-		}
-
-		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
-
-		ksort( $milestones );
-
-		return $milestones;
+		return $result['milestones'];
 	}
 }

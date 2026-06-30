@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once __DIR__ . '/includes/class-settings-page.php';
+require_once __DIR__ . '/includes/class-roster-parser.php';
 require_once __DIR__ . '/includes/class-block-renderer.php';
 
 /**

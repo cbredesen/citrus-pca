@@ -1,0 +1,11 @@
+node_modules/
+.env
+data/
+*.db
+.git/
+tests/
+deploy/
+*.md
+.env.example
+.gitignore
+.containerignore

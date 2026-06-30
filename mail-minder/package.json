@@ -1,0 +1,16 @@
+{
+  "name": "mail-minder",
+  "version": "0.1.0",
+  "description": "Calendar reminder and email template tool",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mjml": "^4.15.3",
+    "node-ical": "^0.19.0"
+  }
+}

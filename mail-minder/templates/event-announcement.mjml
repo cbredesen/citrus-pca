@@ -1,0 +1,83 @@
+<mjml>
+  <mj-head>
+    <mj-title>{{event_name}}</mj-title>
+    <mj-preview>{{event_name}} — {{date}}</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Arial, sans-serif" />
+      <mj-text font-size="15px" line-height="1.6" color="#1e293b" />
+    </mj-attributes>
+  </mj-head>
+
+  <mj-body background-color="#f1f5f9">
+
+    <!-- Header -->
+    <mj-section background-color="#1d4ed8" padding="24px 0">
+      <mj-column>
+        <mj-text align="center" color="#ffffff" font-size="13px" font-weight="bold" letter-spacing="2px" text-transform="uppercase">
+          {{club_name}}
+        </mj-text>
+        <mj-text align="center" color="#ffffff" font-size="28px" font-weight="bold" padding-top="8px">
+          {{event_name}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Event Details Bar -->
+    <mj-section background-color="#1e40af" padding="12px 0">
+      <mj-column>
+        <mj-text align="center" color="#bfdbfe" font-size="14px">
+          📅 {{date}} &nbsp;&nbsp;|&nbsp;&nbsp; 🕐 {{time}} &nbsp;&nbsp;|&nbsp;&nbsp; 📍 {{location}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Body -->
+    <mj-section background-color="#ffffff" padding="32px 24px">
+      <mj-column>
+        <mj-text>
+          Dear Fellow Enthusiasts,
+        </mj-text>
+        <mj-text padding-top="16px">
+          {{description}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Details Box -->
+    <mj-section background-color="#eff6ff" border-radius="8px" padding="24px" margin="0 24px">
+      <mj-column>
+        <mj-text font-weight="bold" font-size="16px" color="#1d4ed8">Event Details</mj-text>
+        <mj-text padding-top="8px">
+          <strong>Date:</strong> {{date}}<br />
+          <strong>Time:</strong> {{time}}<br />
+          <strong>Location:</strong> {{location}}<br />
+          <strong>Cost:</strong> {{cost}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- CTA -->
+    <mj-section background-color="#ffffff" padding="24px">
+      <mj-column>
+        <mj-text align="center" color="#64748b" font-size="14px">
+          {{rsvp_note}}
+        </mj-text>
+        <mj-button background-color="#1d4ed8" color="#ffffff" font-size="15px"
+                   border-radius="6px" padding="14px 28px" href="{{rsvp_url}}">
+          Register / RSVP
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#f8fafc" padding="24px" border-top="1px solid #e2e8f0">
+      <mj-column>
+        <mj-text align="center" color="#94a3b8" font-size="12px">
+          {{club_name}} &bull; {{club_website}}<br />
+          Questions? Reply to this email or contact {{contact_email}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+  </mj-body>
+</mjml>

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mail-minder</title>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      min-height: 100vh;
+    }
+
+    /* ── Layout ──────────────────────────────────────────────── */
+    header {
+      background: #1d4ed8;
+      color: #fff;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; flex-shrink: 0; }
+    nav { display: flex; gap: 4px; }
+    nav button {
+      background: none;
+      border: none;
+      color: #bfdbfe;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    nav button:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    nav button.active { background: rgba(255,255,255,0.2); color: #fff; }
+
+    main { max-width: 860px; margin: 0 auto; padding: 28px 16px 60px; }
+
+    /* ── Cards ───────────────────────────────────────────────── */
+    .card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 10px;
+    }
+    .card-row { display: flex; align-items: flex-start; gap: 12px; }
+    .card-body { flex: 1; min-width: 0; }
+
+    /* ── Section headings ────────────────────────────────────── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 24px 0 10px;
+    }
+    .section-header h2 { font-size: 15px; font-weight: 700; color: #334155; }
+    .section-header .badge {
+      background: #e2e8f0;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 20px;
+      padding: 2px 8px;
+    }
+    .section-header.due h2 { color: #b45309; }
+    .section-header.due .badge { background: #fef3c7; color: #b45309; }
+
+    /* ── Channel badges ──────────────────────────────────────── */
+    .ch {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 2px 7px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+    }
+    .ch-email       { background: #eff6ff; color: #1d4ed8; }
+    .ch-facebook    { background: #eef2ff; color: #4338ca; }
+    .ch-instagram   { background: #fdf4ff; color: #a21caf; }
+    .ch-newsletter  { background: #f0fdf4; color: #15803d; }
+    .ch-other       { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+
+    /* ── Reminder cards ──────────────────────────────────────── */
+    .reminder-title { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+    .reminder-meta  { font-size: 13px; color: #64748b; margin-bottom: 6px; }
+    .reminder-note  { font-size: 13px; color: #334155; font-style: italic; }
+    .due-tag { font-size: 12px; font-weight: 600; }
+    .due-tag.overdue  { color: #dc2626; }
+    .due-tag.today    { color: #d97706; }
+    .due-tag.upcoming { color: #2563eb; }
+    .due-tag.done     { color: #16a34a; }
+
+    /* ── Buttons ─────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-ghost  { background: none; border-color: #e2e8f0; color: #475569; }
+    .btn-ghost:hover  { background: #f8fafc; }
+    .btn-primary { background: #1d4ed8; color: #fff; border-color: #1d4ed8; }
+    .btn-primary:hover { background: #1e40af; }
+    .btn-success { background: #16a34a; color: #fff; border-color: #16a34a; }
+    .btn-success:hover { background: #15803d; }
+    .btn-danger  { background: none; border-color: #fecaca; color: #dc2626; }
+    .btn-danger:hover  { background: #fef2f2; }
+    .btn-sm { font-size: 12px; padding: 3px 9px; }
+
+    .btn-check {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e1;
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: border-color 0.15s, background 0.15s;
+      font-size: 14px;
+      color: transparent;
+    }
+    .btn-check:hover { border-color: #16a34a; color: #16a34a; }
+    .btn-check.checked { border-color: #16a34a; background: #16a34a; color: #fff; }
+
+    /* ── Forms ───────────────────────────────────────────────── */
+    .form-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-top: 12px; }
+    label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
+    select, input[type=number], input[type=text], textarea {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 14px;
+      color: #0f172a;
+      background: #fff;
+      width: 100%;
+    }
+    select:focus, input:focus, textarea:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 1px;
+      border-color: #3b82f6;
+    }
+    .field { flex: 1; min-width: 120px; }
+    .field-sm { flex: 0 0 110px; }
+    textarea { resize: vertical; min-height: 60px; font-family: inherit; }
+
+    /* ── Event cards ─────────────────────────────────────────── */
+    .event-card { margin-bottom: 10px; }
+    .event-title { font-size: 15px; font-weight: 600; }
+    .event-date  { font-size: 13px; color: #64748b; margin: 2px 0 6px; }
+    .event-desc  { font-size: 13px; color: #334155; white-space: pre-wrap; }
+    .event-footer { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+    .add-reminder-form {
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      margin: 12px -18px -16px;
+      padding: 14px 18px 16px;
+      border-radius: 0 0 10px 10px;
+    }
+    .add-reminder-form h4 { font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 2px; }
+
+    /* ── Templates tab ───────────────────────────────────────── */
+    .templates-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 600px) {
+      .templates-layout { grid-template-columns: 1fr; }
+    }
+    .template-list { display: flex; flex-direction: column; gap: 6px; }
+    .template-item {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+      background: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .template-item:hover { background: #eff6ff; border-color: #bfdbfe; }
+    .template-item.selected { background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; }
+    .template-item small { display: block; font-size: 11px; color: #94a3b8; font-weight: 400; margin-top: 2px; }
+
+    .template-panel .card { padding: 0; overflow: hidden; }
+    .template-panel-header { padding: 14px 16px; border-bottom: 1px solid #e2e8f0; }
+    .template-panel-header h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .var-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .var-field { flex: 1; min-width: 160px; }
+    .var-field label { font-size: 11px; }
+    .var-field input { font-size: 13px; padding: 5px 8px; }
+    .template-actions { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+    .copy-success { font-size: 12px; color: #16a34a; font-weight: 600; }
+
+    iframe.preview {
+      width: 100%;
+      height: 600px;
+      border: none;
+      display: block;
+    }
+
+    /* ── Empty / loading states ──────────────────────────────── */
+    .empty { text-align: center; padding: 40px 0; color: #94a3b8; font-size: 14px; }
+    .spinner {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2px solid #e2e8f0;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .collapsed-toggle {
+      font-size: 13px;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 0;
+      border: none;
+      background: none;
+    }
+    .collapsed-toggle:hover { color: #334155; }
+
+    .orphan-tag {
+      display: inline-block;
+      font-size: 11px;
+      background: #fef3c7;
+      color: #92400e;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: 4px;
+    }
+  </style>
+</head>
+<body x-data="app()" x-init="init()">
+
+  <header>
+    <h1>mail-minder</h1>
+    <nav>
+      <button :class="{ active: tab === 'dashboard' }" @click="switchTab('dashboard')">Dashboard</button>
+      <button :class="{ active: tab === 'events' }"    @click="switchTab('events')">Events</button>
+      <button :class="{ active: tab === 'templates' }" @click="switchTab('templates')">Templates</button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ══ DASHBOARD ══════════════════════════════════════════════════════════ -->
+    <div x-show="tab === 'dashboard'" x-cloak>
+
+      <template x-if="remindersLoading">
+        <p class="empty"><span class="spinner"></span>Loading reminders…</p>
+      </template>
+
+      <template x-if="!remindersLoading">
+
+        <!-- Due Now -->
+        <div>
+          <div class="section-header due">
+            <h2>⚠ Due Now</h2>
+            <span class="badge" x-text="reminders.due.length"></span>
+          </div>
+          <template x-if="reminders.due.length === 0">
+            <div class="card"><p style="color:#64748b;font-size:14px;">Nothing due — nice work!</p></div>
+          </template>
+          <template x-for="entry in reminders.due" :key="entry.reminder.id">
+            <div class="card">
+              <div class="card-row">
+                <button class="btn-check" :class="{ checked: !!entry.reminder.completed_at }"
+                        @click="toggleComplete(entry)">✓</button>
+                <div class="card-body">
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+                    <span class="reminder-title" x-text="entry.event.title"></span>
+                    <span class="ch" :class="'ch-' + entry.reminder.channel" x-text="entry.reminder.channel"></span>
+                  </div>
+                  <div class="reminder-meta">
+                    <span x-text="formatDate(entry.event.start)"></span>
+                    &nbsp;·&nbsp;
+                    <span class="due-tag" :class="dueCss(entry.diffDays)" x-text="dueText(entry.diffDays)"></span>
+                  </div>
+                  <div class="reminder-note" x-show="entry.reminder.note" x-text="entry.reminder.note"></div>
+                  <div style="margin-top:8px;">
+                    <button class="btn btn-ghost btn-sm" @click="deleteReminder(entry.reminder.id)">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Upcoming -->
+        <div>
+          <div class="section-header">
+            <h2>📅 Upcoming</h2>
+            <span class="badge" x-text="reminders.upcoming.length"></span>
+          </div>
+          <template x-if="reminders.upcoming.length === 0">
+            <div class="card"><p style="color:#64748b;font-size:14px;">No upcoming reminders.</p></div>
+          </template>
+          <template x-for="entry in reminders.upcoming" :key="entry.reminder.id">
+            <div class="card">
+              <div class="card-row">
+                <button class="btn-check" @click="toggleComplete(entry)">✓</button>
+                <div class="card-body">
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+                    <span class="reminder-title" x-text="entry.event.title"></span>
+                    <span class="ch" :class="'ch-' + entry.reminder.channel" x-text="entry.reminder.channel"></span>
+                  </div>
+                  <div class="reminder-meta">
+                    <span x-text="formatDate(entry.event.start)"></span>
+                    &nbsp;·&nbsp;
+                    <span class="due-tag upcoming" x-text="dueText(entry.diffDays)"></span>
+                  </div>
+                  <div class="reminder-note" x-show="entry.reminder.note" x-text="entry.reminder.note"></div>
+                  <div style="margin-top:8px;">
+                    <button class="btn btn-ghost btn-sm" @click="deleteReminder(entry.reminder.id)">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Orphaned -->
+        <template x-if="reminders.orphaned.length > 0">
+          <div>
+            <div class="section-header">
+              <h2>⚡ Orphaned</h2>
+              <span class="badge" x-text="reminders.orphaned.length"></span>
+            </div>
+            <template x-for="entry in reminders.orphaned" :key="entry.reminder.id">
+              <div class="card">
+                <div class="card-row">
+                  <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+                      <span class="reminder-title" style="color:#64748b;" x-text="entry.reminder.event_id"></span>
+                      <span class="orphan-tag">event not in feed</span>
+                      <span class="ch" :class="'ch-' + entry.reminder.channel" x-text="entry.reminder.channel"></span>
+                    </div>
+                    <div class="reminder-note" x-show="entry.reminder.note" x-text="entry.reminder.note"></div>
+                    <div style="margin-top:8px;">
+                      <button class="btn btn-danger btn-sm" @click="deleteReminder(entry.reminder.id)">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </template>
+
+        <!-- Completed (collapsible) -->
+        <div>
+          <div class="section-header" style="margin-top:28px;">
+            <button class="collapsed-toggle" @click="pastOpen = !pastOpen">
+              <span x-text="pastOpen ? '▾' : '▸'"></span>
+              <span>Completed</span>
+              <span class="badge" x-text="reminders.past.length"></span>
+            </button>
+          </div>
+          <div x-show="pastOpen">
+            <template x-if="reminders.past.length === 0">
+              <div class="card"><p style="color:#64748b;font-size:14px;">No completed reminders.</p></div>
+            </template>
+            <template x-for="entry in reminders.past" :key="entry.reminder.id">
+              <div class="card" style="opacity:0.7;">
+                <div class="card-row">
+                  <button class="btn-check checked" @click="toggleComplete(entry)">✓</button>
+                  <div class="card-body">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+                      <span class="reminder-title" style="text-decoration:line-through;" x-text="entry.event.title"></span>
+                      <span class="ch" :class="'ch-' + entry.reminder.channel" x-text="entry.reminder.channel"></span>
+                    </div>
+                    <div class="reminder-meta">
+                      <span x-text="formatDate(entry.event.start)"></span>
+                      &nbsp;·&nbsp;
+                      <span class="due-tag done">Done</span>
+                    </div>
+                    <div class="reminder-note" x-show="entry.reminder.note" x-text="entry.reminder.note"></div>
+                    <div style="margin-top:8px;">
+                      <button class="btn btn-ghost btn-sm" @click="deleteReminder(entry.reminder.id)">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+      </template>
+    </div>
+
+    <!-- ══ EVENTS ══════════════════════════════════════════════════════════════ -->
+    <div x-show="tab === 'events'" x-cloak>
+
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;margin-top:4px;">
+        <button class="btn btn-ghost" @click="loadEvents(true)" :disabled="eventsLoading">
+          <template x-if="eventsLoading"><span class="spinner"></span></template>
+          Refresh Calendar
+        </button>
+        <span x-show="eventsLastFetched" style="font-size:13px;color:#94a3b8;">
+          Updated <span x-text="timeAgo(eventsLastFetched)"></span>
+        </span>
+      </div>
+
+      <!-- Calendar feed status -->
+      <template x-if="calendarStatus">
+        <div class="card" style="margin-bottom:16px;font-size:13px;">
+          <div style="font-weight:700;color:#334155;margin-bottom:8px;">Calendar feeds</div>
+          <template x-if="calendarStatus.configuredUrls.length === 0">
+            <p style="color:#dc2626;">No feeds configured — set <code>ICAL_URLS</code> in your environment.</p>
+          </template>
+          <template x-for="(feed, i) in calendarStatus.feedStatus" :key="i">
+            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;line-height:1.4;">
+              <span x-text="feed.ok ? '✓' : '✗'"
+                    :style="feed.ok ? 'color:#16a34a;font-weight:700;flex-shrink:0;' : 'color:#dc2626;font-weight:700;flex-shrink:0;'"></span>
+              <div style="min-width:0;">
+                <code style="font-size:11px;word-break:break-all;color:#475569;" x-text="feed.url"></code>
+                <span x-show="feed.ok" style="color:#64748b;">
+                  — <span x-text="feed.eventCount"></span> event<span x-text="feed.eventCount !== 1 ? 's' : ''"></span> in next 60 days
+                </span>
+                <span x-show="!feed.ok" style="color:#dc2626;display:block;margin-top:2px;" x-text="feed.error"></span>
+              </div>
+            </div>
+          </template>
+          <template x-if="calendarStatus.configuredUrls.length > 0 && calendarStatus.feedStatus.length === 0">
+            <p style="color:#94a3b8;">Not yet fetched — click Refresh Calendar.</p>
+          </template>
+        </div>
+      </template>
+
+      <template x-if="!eventsLoading && events.length === 0">
+        <div class="card empty">
+          <p>No events found in the next 60 days.</p>
+          <p style="margin-top:6px;font-size:12px;">Check that <code>ICAL_URLS</code> is set and the calendar is public.</p>
+        </div>
+      </template>
+
+      <template x-for="event in events" :key="event.id">
+        <div class="card event-card">
+          <div class="event-title" x-text="event.title"></div>
+          <div class="event-date" x-text="formatDate(event.start)"></div>
+          <div class="event-desc" x-show="event.description" x-text="truncate(event.description, 200)"></div>
+          <div class="event-footer">
+            <a x-show="event.url" :href="event.url" target="_blank" rel="noopener"
+               style="font-size:13px;color:#2563eb;">View event ↗</a>
+            <button class="btn btn-ghost btn-sm"
+                    @click="addingFor = (addingFor === event.id ? null : event.id); resetAddForm()">
+              + Add Reminder
+            </button>
+          </div>
+
+          <!-- Inline add-reminder form -->
+          <div class="add-reminder-form" x-show="addingFor === event.id">
+            <h4>New reminder for: <span x-text="event.title"></span></h4>
+            <div class="form-row">
+              <div class="field-sm">
+                <label>Days before event</label>
+                <input type="number" x-model.number="addForm.days_before" min="0" max="365" />
+              </div>
+              <div class="field-sm">
+                <label>Channel</label>
+                <select x-model="addForm.channel">
+                  <option value="email">Email</option>
+                  <option value="newsletter">Newsletter</option>
+                  <option value="facebook">Facebook</option>
+                  <option value="instagram">Instagram</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Note (optional)</label>
+                <input type="text" x-model="addForm.note" placeholder="e.g. Post event poster" />
+              </div>
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px;">
+              <button class="btn btn-primary btn-sm" @click="saveReminder(event.id)">Save Reminder</button>
+              <button class="btn btn-ghost btn-sm" @click="addingFor = null">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <!-- ══ TEMPLATES ══════════════════════════════════════════════════════════ -->
+    <div x-show="tab === 'templates'" x-cloak>
+
+      <template x-if="templates.length === 0">
+        <div class="card empty">
+          <p>No templates found.</p>
+          <p style="margin-top:6px;font-size:12px;">Add <code>.mjml</code> files to the <code>templates/</code> directory.</p>
+        </div>
+      </template>
+
+      <div class="templates-layout" x-show="templates.length > 0">
+
+        <!-- Template list -->
+        <div class="template-list">
+          <template x-for="tmpl in templates" :key="tmpl.name">
+            <div class="template-item" :class="{ selected: selectedTemplate && selectedTemplate.name === tmpl.name }"
+                 @click="selectTemplate(tmpl)">
+              <span x-text="tmpl.name.replace(/-/g,' ')"></span>
+              <small x-text="tmpl.variables.length + ' variable' + (tmpl.variables.length !== 1 ? 's' : '')"></small>
+            </div>
+          </template>
+        </div>
+
+        <!-- Template panel -->
+        <div class="template-panel" x-show="selectedTemplate">
+          <div class="card">
+            <div class="template-panel-header">
+              <h3 x-text="selectedTemplate && selectedTemplate.name.replace(/-/g,' ')"></h3>
+
+              <!-- Variable inputs -->
+              <template x-if="selectedTemplate && selectedTemplate.variables.length > 0">
+                <div class="var-grid">
+                  <template x-for="v in selectedTemplate.variables" :key="v">
+                    <div class="var-field">
+                      <label x-text="v"></label>
+                      <input type="text" :placeholder="'{{' + v + '}}'"
+                             :value="templateVars[v] || ''"
+                             @input="templateVars[v] = $event.target.value; refreshPreview()" />
+                    </div>
+                  </template>
+                </div>
+              </template>
+
+              <div class="template-actions">
+                <button class="btn btn-primary btn-sm" @click="copyHtml()">Copy HTML</button>
+                <span class="copy-success" x-show="copySuccess" x-transition>✓ Copied!</span>
+              </div>
+            </div>
+
+            <iframe class="preview" :src="previewUrl" x-show="previewUrl"></iframe>
+          </div>
+        </div>
+
+        <!-- Placeholder when nothing selected -->
+        <div class="card" x-show="!selectedTemplate" style="display:flex;align-items:center;justify-content:center;height:200px;">
+          <p style="color:#94a3b8;font-size:14px;">Select a template to preview</p>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function app() {
+      return {
+        tab: 'dashboard',
+
+        // Dashboard state
+        reminders: { due: [], upcoming: [], past: [], orphaned: [] },
+        remindersLoading: false,
+        pastOpen: false,
+
+        // Events state
+        events: [],
+        eventsLoading: false,
+        eventsLastFetched: null,
+        calendarStatus: null,
+        addingFor: null,
+        addForm: { days_before: 7, channel: 'email', note: '' },
+
+        // Templates state
+        templates: [],
+        selectedTemplate: null,
+        templateVars: {},
+        previewUrl: '',
+        copySuccess: false,
+
+        async init() {
+          await this.loadReminders();
+        },
+
+        async switchTab(t) {
+          this.tab = t;
+          if (t === 'events' && !this.eventsLastFetched) await this.loadEvents();
+          if (t === 'templates' && !this.templates.length) await this.loadTemplates();
+        },
+
+        // ── Reminders ──────────────────────────────────────────────────────────
+
+        async loadReminders() {
+          this.remindersLoading = true;
+          try {
+            const r = await fetch('/api/reminders');
+            this.reminders = await r.json();
+          } catch (e) {
+            console.error('Failed to load reminders', e);
+          } finally {
+            this.remindersLoading = false;
+          }
+        },
+
+        async toggleComplete(entry) {
+          const endpoint = entry.reminder.completed_at ? 'uncomplete' : 'complete';
+          await fetch(`/api/reminders/${entry.reminder.id}/${endpoint}`, { method: 'POST' });
+          await this.loadReminders();
+        },
+
+        async deleteReminder(id) {
+          if (!confirm('Delete this reminder?')) return;
+          await fetch(`/api/reminders/${id}`, { method: 'DELETE' });
+          await this.loadReminders();
+        },
+
+        // ── Events ─────────────────────────────────────────────────────────────
+
+        async loadEvents(forceRefresh = false) {
+          this.eventsLoading = true;
+          try {
+            const r = await fetch('/api/events' + (forceRefresh ? '?refresh=1' : ''));
+            this.events = await r.json();
+            this.eventsLastFetched = Date.now();
+            const sr = await fetch('/api/calendar/status');
+            this.calendarStatus = await sr.json();
+          } catch (e) {
+            console.error('Failed to load events', e);
+          } finally {
+            this.eventsLoading = false;
+          }
+        },
+
+        resetAddForm() {
+          this.addForm = { days_before: 7, channel: 'email', note: '' };
+        },
+
+        async saveReminder(eventId) {
+          if (this.addForm.days_before < 0) return;
+          await fetch('/api/reminders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              event_id: eventId,
+              channel: this.addForm.channel,
+              days_before: this.addForm.days_before,
+              note: this.addForm.note,
+            }),
+          });
+          this.addingFor = null;
+          this.resetAddForm();
+          await this.loadReminders();
+        },
+
+        // ── Templates ──────────────────────────────────────────────────────────
+
+        async loadTemplates() {
+          try {
+            const r = await fetch('/api/templates');
+            this.templates = await r.json();
+          } catch (e) {
+            console.error('Failed to load templates', e);
+          }
+        },
+
+        selectTemplate(tmpl) {
+          this.selectedTemplate = tmpl;
+          this.templateVars = {};
+          this.copySuccess = false;
+          this.refreshPreview();
+        },
+
+        refreshPreview() {
+          if (!this.selectedTemplate) { this.previewUrl = ''; return; }
+          const params = new URLSearchParams(this.templateVars);
+          this.previewUrl = `/api/templates/${encodeURIComponent(this.selectedTemplate.name)}/render?${params}`;
+        },
+
+        async copyHtml() {
+          if (!this.selectedTemplate) return;
+          const params = new URLSearchParams(this.templateVars);
+          const url = `/api/templates/${encodeURIComponent(this.selectedTemplate.name)}/html?${params}`;
+          try {
+            const r = await fetch(url);
+            const html = await r.text();
+            await navigator.clipboard.writeText(html);
+            this.copySuccess = true;
+            setTimeout(() => { this.copySuccess = false; }, 2500);
+          } catch (e) {
+            alert('Copy failed — try selecting all text in the preview instead.');
+          }
+        },
+
+        // ── Utilities ──────────────────────────────────────────────────────────
+
+        formatDate(iso) {
+          if (!iso) return '';
+          return new Date(iso).toLocaleDateString('en-US', {
+            weekday: 'short', month: 'short', day: 'numeric', year: 'numeric'
+          });
+        },
+
+        dueText(diffDays) {
+          if (diffDays < 0) return `${Math.abs(diffDays)}d overdue`;
+          if (diffDays === 0) return 'Due today';
+          return `in ${diffDays}d`;
+        },
+
+        dueCss(diffDays) {
+          if (diffDays < 0) return 'overdue';
+          if (diffDays === 0) return 'today';
+          return 'upcoming';
+        },
+
+        timeAgo(ts) {
+          const secs = Math.floor((Date.now() - ts) / 1000);
+          if (secs < 60) return 'just now';
+          if (secs < 3600) return `${Math.floor(secs / 60)}m ago`;
+          return `${Math.floor(secs / 3600)}h ago`;
+        },
+
+        truncate(str, max) {
+          if (!str || str.length <= max) return str;
+          return str.slice(0, max) + '…';
+        },
+      };
+    }
+  </script>
+</body>
+</html>
