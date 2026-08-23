@@ -3,7 +3,7 @@
  * Plugin Name:       FLC File Include
  * Plugin URI:        https://github.com/cbredesen/flc-file-include
  * Description:       Gutenberg block to include an HTML file from a configured server-side directory.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.3
  * Requires PHP:      8.0
  * Author:            cbredesen
@@ -42,7 +42,7 @@ add_action( 'init', function () {
 		'flc-file-include-frontend',
 		plugins_url( 'assets/frontend.css', __FILE__ ),
 		array(),
-		'1.0.0'
+		'1.1.0'
 	);
 
 	register_block_type(

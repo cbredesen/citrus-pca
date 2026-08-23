@@ -1,14 +1,14 @@
 {
   "name": "flc-anniversaries",
-  "version": "1.0.0",
-  "description": "WordPress plugin to display club member milestone anniversaries for the current month.",
+  "version": "1.2.0",
+  "description": "WordPress plugin to display club member anniversaries for the current month.",
   "scripts": {
     "build": "wp-scripts build",
     "start": "wp-scripts start",
     "lint:js": "wp-scripts lint-js",
     "lint:css": "wp-scripts lint-style",
     "packages-update": "wp-scripts packages-update",
-    "plugin:zip": "npm run build && cd .. && zip -r flc-anniversaries.zip flc-anniversaries -x 'flc-anniversaries/node_modules/*' -x 'flc-anniversaries/src/*' -x 'flc-anniversaries/.git/*' -x 'flc-anniversaries/.claude/*' -x 'flc-anniversaries/CLAUDE.md' -x 'flc-anniversaries/.gitignore' -x 'flc-anniversaries/package*.json'"
+    "plugin:zip": "npm run build && cd .. && zip -r flc-anniversaries.zip flc-anniversaries -x 'flc-anniversaries/node_modules/*' -x 'flc-anniversaries/src/*' -x 'flc-anniversaries/.git/*' -x 'flc-anniversaries/.claude/*' -x 'flc-anniversaries/CLAUDE.md' -x 'flc-anniversaries/.gitignore' -x 'flc-anniversaries/package*.json' -x 'flc-anniversaries/vendor/*' -x 'flc-anniversaries/tests/*' -x 'flc-anniversaries/data/*' -x 'flc-anniversaries/composer.json' -x 'flc-anniversaries/composer.lock' -x 'flc-anniversaries/phpunit.xml' -x 'flc-anniversaries/.phpunit.result.cache'"
   },
   "devDependencies": {
     "@wordpress/scripts": "^30.0.0"

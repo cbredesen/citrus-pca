@@ -4,7 +4,12 @@
  */
 class FLC_Anniversaries_Block_Renderer {
 
-	public static function render(): string {
+	/**
+	 * @param array{showAllAnniversaries?: bool} $attributes
+	 */
+	public static function render( array $attributes = array() ): string {
+		$show_all = ! empty( $attributes['showAllAnniversaries'] );
+
 		$month = isset( $_GET['flc_month'] ) ? (int) $_GET['flc_month'] : (int) date( 'n' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$year  = isset( $_GET['flc_year'] )  ? (int) $_GET['flc_year']  : (int) date( 'Y' );  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
@@ -26,15 +31,13 @@ class FLC_Anniversaries_Block_Renderer {
 		$html .= '<a class="flc-anniversaries-nav-btn" href="' . esc_url( $next_url ) . '">' . esc_html( $next->format( 'F Y' ) ) . ' &rsaquo;</a>';
 		$html .= '</div>';
 
-		$milestones = self::load_milestones( $month, $year );
+		$milestones = self::load_milestones( $month, $year, $show_all );
 
-		if ( is_string( $milestones ) ) {
-			$html .= $milestones;
-		} elseif ( empty( $milestones ) ) {
-			$html .= '<p class="flc-anniversaries-none">No milestone anniversaries this month.</p>';
+		if ( empty( $milestones ) ) {
+			$empty_message = $show_all ? 'No anniversaries this month.' : 'No milestone anniversaries this month.';
+			$html .= '<p class="flc-anniversaries-none">' . esc_html( $empty_message ) . '</p>';
 		} else {
 			foreach ( $milestones as $years => $names ) {
-				sort( $names );
 				$label = esc_html( $years ) . ' Year' . ( $years !== 1 ? 's' : '' );
 				$html .= '<section class="flc-anniversary-group">';
 				$html .= '<h2 class="flc-anniversary-heading">' . $label . '</h2>';
@@ -53,24 +56,18 @@ class FLC_Anniversaries_Block_Renderer {
 	}
 
 	/**
-	 * Returns an associative array of [ years => names[] ], a string error message, or an empty array.
+	 * Returns an associative array of [ years => display names[] ] for members
+	 * whose anniversary falls in the given month. When $show_all is false
+	 * (the default), only years of membership (relative to $year) that are a
+	 * positive multiple of 5 are included; when true, every member with a
+	 * positive tenure is included, grouped by their exact years of membership.
 	 *
-	 * @return array|string
+	 * @return array<int, list<string>>
 	 */
-	private static function load_milestones( int $month, int $year ) {
-		$csv_path = flc_anniversaries_get_csv_path();
-		$result   = FLC_Anniversaries_Roster_Parser::parse( $csv_path, $month, $year );
+	private static function load_milestones( int $month, int $year, bool $show_all = false ): array {
+		$db   = new FLC_Anniversaries_DB();
+		$rows = $db->get_by_month( $month );
 
-		// Key 0 = file-level error (not found / unreadable).
-		if ( isset( $result['errors'][0] ) ) {
-			return '<p class="flc-anniversaries-none">Anniversary data not found.</p>';
-		}
-
-		// Row-level errors: log each one but keep rendering with whatever is valid.
-		foreach ( $result['errors'] as $message ) {
-			trigger_error( esc_html( $message ), E_USER_WARNING ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error
-		}
-
-		return $result['milestones'];
+		return FLC_Anniversaries_Milestone_Calculator::group_by_milestone( $rows, $month, $year, ! $show_all );
 	}
 }
