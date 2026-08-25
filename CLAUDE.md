@@ -13,16 +13,17 @@ Goals:
 
 ## Repository Structure
 
-Each subdirectory is a self-contained WordPress plugin with its own `CLAUDE.md`:
-
-- `flc-anniversaries/` — Plugin: displays club member milestone anniversaries for the current month (pure PHP, no build step)
-- `flc-file-include/` — Plugin: Gutenberg block that includes HTML files from a server-side directory (React/Gutenberg block with `@wordpress/scripts` build toolchain)
+- `plugins/` — WordPress plugins deployed to the site. Each is a self-contained plugin directory with its own `CLAUDE.md`:
+  - `plugins/flc-anniversaries/` — Plugin: displays club member milestone anniversaries for the current month (pure PHP, no build step)
+  - `plugins/flc-file-include/` — Plugin: Gutenberg block that includes HTML files from a server-side directory (React/Gutenberg block with `@wordpress/scripts` build toolchain)
+- `utilities/` — standalone tooling that supports the site but is not itself a WordPress plugin. Each is self-contained with its own `CLAUDE.md`:
+  - `utilities/mail-minder/` — containerized Node.js app for posting reminders tied to calendar events and MJML email template previews
 
 Planned but not yet present: `themes/`, `config/`, `tests/`, `scripts/`
 
 ## Plugin Build Commands (for plugins with a JS build step)
 
-Run from within the plugin directory (e.g., `cd flc-file-include`):
+Run from within the plugin directory (e.g., `cd plugins/flc-file-include`):
 
 ```bash
 npm install         # Install dependencies
@@ -65,7 +66,7 @@ Package a plugin for upload to WordPress via:
 ```bash
 npm run plugin:zip   # run from within the plugin directory
 ```
-This produces a `.zip` in the repo root (one level up from the plugin directory), excluding `node_modules`, `src`, and dev-only files.
+This produces a `.zip` in `plugins/` (one level up from the plugin directory), excluding `node_modules`, `src`, and dev-only files.
 
 ## WordPress Context
 

@@ -6,10 +6,18 @@ WordPress plugin development and site maintenance tooling for **flc.pca.org**.
 
 | Directory | Description |
 |---|---|
-| `flc-anniversaries/` | Displays club member milestone anniversaries for the current month |
-| `flc-file-include/` | Gutenberg block that includes HTML files from a server-side directory |
+| `plugins/flc-anniversaries/` | Displays club member milestone anniversaries for the current month |
+| `plugins/flc-file-include/` | Gutenberg block that includes HTML files from a server-side directory |
 
 Each plugin has its own `README.md` and `CLAUDE.md`.
+
+## Utilities
+
+| Directory | Description |
+|---|---|
+| `utilities/mail-minder/` | Containerized Node.js app for posting reminders tied to calendar events and MJML email template previews |
+
+Each utility has its own `README.md` and `CLAUDE.md`.
 
 ## Pulling Production to Local
 
