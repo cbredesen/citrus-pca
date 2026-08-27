@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FLC Theme Concepts — Review</title>
+<style>
+  *,*::before,*::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: #1c1e26;
+    background: #f4f5f7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 56px 24px 80px; }
+  header.page { margin-bottom: 44px; }
+  h1 { margin: 0 0 10px; font-size: 30px; letter-spacing: -0.01em; }
+  .lede { margin: 0; max-width: 68ch; font-size: 15px; line-height: 1.6; color: #565a66; }
+
+  .concept { margin-top: 44px; }
+  .concept h2 {
+    margin: 0 0 4px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .swatch {
+    width: 14px; height: 14px; border-radius: 4px;
+    border: 1px solid rgba(0,0,0,.15);
+    flex: none;
+  }
+  .concept p.desc { margin: 0 0 18px; font-size: 14px; line-height: 1.55; color: #565a66; max-width: 70ch; }
+
+  .pair {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+  @media (max-width: 700px) { .pair { grid-template-columns: 1fr; } }
+
+  .shot {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.09);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+  }
+  .shot:hover {
+    border-color: rgba(0,0,0,.22);
+    box-shadow: 0 10px 26px rgba(0,0,0,.12);
+    transform: translateY(-2px);
+  }
+  .shot .frame {
+    height: 300px;
+    overflow: hidden;
+    background: #e9eaec;
+    border-bottom: 1px solid rgba(0,0,0,.07);
+  }
+  .shot .frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .shot .cap {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .shot .cap strong { font-weight: 600; }
+  .shot .cap span { color: #8a8e99; }
+
+  footer.page { margin-top: 56px; font-size: 12.5px; color: #8a8e99; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page">
+    <h1>Florida Citrus Region — theme concepts</h1>
+    <p class="lede">Four style directions for flc.pca.org, each shown as a home page and an
+      article page. Click any screenshot to open that page. These are static mockups with
+      placeholder photos and filler copy — for look-and-feel review only.</p>
+  </header>
+
+  <section class="concept">
+    <h2><span class="swatch" style="background:#2B5CC7"></span>White</h2>
+    <p class="desc">Light layout, classic top bar, ticket-style event cards. Blue accent.</p>
+    <div class="pair">
+      <a class="shot" href="concepts/flc-white/index.html">
+        <div class="frame"><img src="screenshots/flc-white-index.png" alt="White concept — home page"></div>
+        <div class="cap"><strong>Home</strong><span>concepts/flc-white/index.html</span></div>
+      </a>
+      <a class="shot" href="concepts/flc-white/post.html">
+        <div class="frame"><img src="screenshots/flc-white-post.png" alt="White concept — article page"></div>
+        <div class="cap"><strong>Article</strong><span>concepts/flc-white/post.html</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="concept">
+    <h2><span class="swatch" style="background:#FDFCFA"></span>Cream</h2>
+    <p class="desc">Warm off-white background, editorial feel, oversized condensed caps. Blue accent, navy buttons.</p>
+    <div class="pair">
+      <a class="shot" href="concepts/flc-cream/index.html">
+        <div class="frame"><img src="screenshots/flc-cream-index.png" alt="Cream concept — home page"></div>
+        <div class="cap"><strong>Home</strong><span>concepts/flc-cream/index.html</span></div>
+      </a>
+      <a class="shot" href="concepts/flc-cream/post.html">
+        <div class="frame"><img src="screenshots/flc-cream-post.png" alt="Cream concept — article page"></div>
+        <div class="cap"><strong>Article</strong><span>concepts/flc-cream/post.html</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="concept">
+    <h2><span class="swatch" style="background:#262B4A"></span>Navy</h2>
+    <p class="desc">Dark header, full-bleed photo hero, rounded poster-style event cards. Blue accent.</p>
+    <div class="pair">
+      <a class="shot" href="concepts/flc-navy/index.html">
+        <div class="frame"><img src="screenshots/flc-navy-index.png" alt="Navy concept — home page"></div>
+        <div class="cap"><strong>Home</strong><span>concepts/flc-navy/index.html</span></div>
+      </a>
+      <a class="shot" href="concepts/flc-navy/post.html">
+        <div class="frame"><img src="screenshots/flc-navy-post.png" alt="Navy concept — article page"></div>
+        <div class="cap"><strong>Article</strong><span>concepts/flc-navy/post.html</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="concept">
+    <h2><span class="swatch" style="background:#49864E"></span>Green</h2>
+    <p class="desc">White header with green section bands and citrus-orange call-to-action buttons.</p>
+    <div class="pair">
+      <a class="shot" href="concepts/flc-green/index.html">
+        <div class="frame"><img src="screenshots/flc-green-index.png" alt="Green concept — home page"></div>
+        <div class="cap"><strong>Home</strong><span>concepts/flc-green/index.html</span></div>
+      </a>
+      <a class="shot" href="concepts/flc-green/post.html">
+        <div class="frame"><img src="screenshots/flc-green-post.png" alt="Green concept — article page"></div>
+        <div class="cap"><strong>Article</strong><span>concepts/flc-green/post.html</span></div>
+      </a>
+    </div>
+  </section>
+
+  <footer class="page">
+    Screenshots captured at 1280&nbsp;px width. Regenerate with a headless browser after editing any concept.
+  </footer>
+
+</div>
+</body>
+</html>
