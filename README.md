@@ -4,6 +4,8 @@ WordPress plugin development and site maintenance tooling for **flc.pca.org**.
 
 ## Plugins
 
+See [`plugins/README.md`](plugins/README.md) for the full list plus shared build and deploy instructions.
+
 | Directory | Description |
 |---|---|
 | `plugins/flc-anniversaries/` | Displays club member milestone anniversaries for the current month |

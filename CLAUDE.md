@@ -13,28 +13,13 @@ Goals:
 
 ## Repository Structure
 
-- `plugins/` — WordPress plugins deployed to the site. Each is a self-contained plugin directory with its own `CLAUDE.md`:
-  - `plugins/flc-anniversaries/` — Plugin: displays club member milestone anniversaries for the current month (pure PHP, no build step)
-  - `plugins/flc-file-include/` — Plugin: Gutenberg block that includes HTML files from a server-side directory (React/Gutenberg block with `@wordpress/scripts` build toolchain)
+- `plugins/` — WordPress plugins deployed to the site. See `plugins/CLAUDE.md` for shared plugin conventions and build/deploy commands; each plugin also has its own `CLAUDE.md`:
+  - `plugins/flc-anniversaries/` — displays club member milestone anniversaries for the current month (pure PHP, no build step)
+  - `plugins/flc-file-include/` — Gutenberg block that includes HTML files from a server-side directory (React/Gutenberg block with `@wordpress/scripts` build toolchain)
 - `utilities/` — standalone tooling that supports the site but is not itself a WordPress plugin. Each is self-contained with its own `CLAUDE.md`:
   - `utilities/mail-minder/` — containerized Node.js app for posting reminders tied to calendar events and MJML email template previews
 
 Planned but not yet present: `themes/`, `config/`, `tests/`, `scripts/`
-
-## Plugin Build Commands (for plugins with a JS build step)
-
-Run from within the plugin directory (e.g., `cd plugins/flc-file-include`):
-
-```bash
-npm install         # Install dependencies
-npm run build       # Production build -> build/
-npm run start       # Watch mode for development
-npm run lint:js     # ESLint
-npm run lint:css    # Stylelint
-npm run plugin:zip  # Build and package plugin as a .zip (excludes dev files)
-```
-
-`flc-anniversaries` is pure PHP — no build step required.
 
 ## Pulling Production to Local
 
@@ -60,20 +45,12 @@ cp bin/.env.example bin/.env
 
 **wp-cli note:** run the script from Local's "Open Site Shell" so `wp` points to Local's bundled wp-cli, or set `WP_CLI` in `bin/.env` to the full path.
 
-## Deploying Plugins
-
-Package a plugin for upload to WordPress via:
-```bash
-npm run plugin:zip   # run from within the plugin directory
-```
-This produces a `.zip` in `plugins/` (one level up from the plugin directory), excluding `node_modules`, `src`, and dev-only files.
-
 ## WordPress Context
 
 - Site URL: flc.pca.org
 - Platform: WordPress (self-hosted)
 - Avoid direct database edits; prefer wp-cli or WordPress APIs
-- Plugins follow standard WordPress conventions: plugin header in main `.php` file, `wp_enqueue_*` for assets, shortcodes or `register_block_type()` for output
+- See `plugins/CLAUDE.md` for plugin build/deploy commands and WordPress plugin conventions
 
 ## wp-cli Reference
 
