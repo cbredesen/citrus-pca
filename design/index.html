@@ -78,6 +78,38 @@
   .shot .cap strong { font-weight: 600; }
   .shot .cap span { color: #8a8e99; }
 
+  .palette {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.09);
+    border-radius: 12px;
+    padding: 22px 24px 24px;
+  }
+  .palette h2 { margin: 0 0 4px; font-size: 20px; }
+  .palette p.desc { margin: 0 0 18px; font-size: 14px; line-height: 1.55; color: #565a66; max-width: 70ch; }
+  .palette h3 {
+    margin: 18px 0 10px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #8a8e99;
+  }
+  .chips {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+  }
+  .chip { font-size: 12.5px; line-height: 1.45; }
+  .chip .fill {
+    height: 64px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,.08);
+    margin-bottom: 8px;
+  }
+  .chip strong { display: block; font-size: 13.5px; }
+  .chip code { font-size: 12.5px; }
+  .chip span { color: #8a8e99; }
+
   footer.page { margin-top: 56px; font-size: 12.5px; color: #8a8e99; }
 </style>
 </head>
@@ -91,9 +123,30 @@
       placeholder photos and filler copy — for look-and-feel review only.</p>
   </header>
 
+  <section class="palette">
+    <h2>Official color palette</h2>
+    <p class="desc">From the club's <em>Citrus Color Palette</em> sheet. All four concepts draw their
+      brand colors from this set. The sheet specifies print (CMYK) values; the hex codes below
+      are the screen equivalents used in the mockups.</p>
+    <h3>Primary</h3>
+    <div class="chips">
+      <div class="chip"><div class="fill" style="background:#4A864E"></div><strong>Citrus Green</strong><code>#4A864E</code><br><span>Spot · C74 M26 Y86 K11</span></div>
+      <div class="chip"><div class="fill" style="background:#DB9336"></div><strong>Citrus Orange</strong><code>#DB9336</code><br><span>Spot · C13 M46 Y93 K1</span></div>
+      <div class="chip"><div class="fill" style="background:#424562"></div><strong>Navy</strong><code>#424562</code><br><span>C79 M73 Y39 K26</span></div>
+    </div>
+    <h3>Secondary</h3>
+    <div class="chips">
+      <div class="chip"><div class="fill" style="background:#CE6423"></div><strong>Rust</strong><code>#CE6423</code><br><span>C20 M67 Y100 K7</span></div>
+      <div class="chip"><div class="fill" style="background:#2279C2"></div><strong>Blue</strong><code>#2279C2</code><br><span>C84 M50 Y0 K0</span></div>
+      <div class="chip"><div class="fill" style="background:#6DD0B9"></div><strong>Teal</strong><code>#6DD0B9</code><br><span>C54 M0 Y35 K0</span></div>
+      <div class="chip"><div class="fill" style="background:#A2D052"></div><strong>Lime</strong><code>#A2D052</code><br><span>C40 M0 Y93 K0</span></div>
+      <div class="chip"><div class="fill" style="background:#92CEED"></div><strong>Sky</strong><code>#92CEED</code><br><span>C39 M12 Y0 K0</span></div>
+    </div>
+  </section>
+
   <section class="concept">
-    <h2><span class="swatch" style="background:#2B5CC7"></span>White</h2>
-    <p class="desc">Light layout, classic top bar, ticket-style event cards. Blue accent.</p>
+    <h2><span class="swatch" style="background:#2279C2"></span>White</h2>
+    <p class="desc">Light layout, classic top bar, ticket-style event cards. Navy date panels, palette-blue accent.</p>
     <div class="pair">
       <a class="shot" href="concepts/flc-white/index.html">
         <div class="frame"><img src="screenshots/flc-white-index.png" alt="White concept — home page"></div>
@@ -108,7 +161,7 @@
 
   <section class="concept">
     <h2><span class="swatch" style="background:#FDFCFA"></span>Cream</h2>
-    <p class="desc">Warm off-white background, editorial feel, oversized condensed caps. Blue accent, navy buttons.</p>
+    <p class="desc">Warm off-white background, editorial feel, oversized condensed caps. Navy buttons, blue links, citrus-orange highlights.</p>
     <div class="pair">
       <a class="shot" href="concepts/flc-cream/index.html">
         <div class="frame"><img src="screenshots/flc-cream-index.png" alt="Cream concept — home page"></div>
@@ -122,8 +175,8 @@
   </section>
 
   <section class="concept">
-    <h2><span class="swatch" style="background:#262B4A"></span>Navy</h2>
-    <p class="desc">Dark header, full-bleed photo hero, rounded poster-style event cards. Blue accent.</p>
+    <h2><span class="swatch" style="background:#424562"></span>Navy</h2>
+    <p class="desc">Dark header, full-bleed photo hero, rounded poster-style event cards. Blue accent, sky and orange highlights on navy.</p>
     <div class="pair">
       <a class="shot" href="concepts/flc-navy/index.html">
         <div class="frame"><img src="screenshots/flc-navy-index.png" alt="Navy concept — home page"></div>
@@ -137,7 +190,7 @@
   </section>
 
   <section class="concept">
-    <h2><span class="swatch" style="background:#49864E"></span>Green</h2>
+    <h2><span class="swatch" style="background:#4A864E"></span>Green</h2>
     <p class="desc">White header with green section bands and citrus-orange call-to-action buttons.</p>
     <div class="pair">
       <a class="shot" href="concepts/flc-green/index.html">

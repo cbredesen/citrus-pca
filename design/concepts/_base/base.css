@@ -1,0 +1,54 @@
+/* base.css — shared reset and structural primitives for every concept.
+   Identical copy in each concept folder. All visual character lives in theme.css.
+   concepts/_base/ holds the canonical index.html, post.html and base.css;
+   see design/CLAUDE.md ("concepts/") for the copy rule. */
+
+/* Official FLC palette ("Citrus Color Palette.pdf"). The PDF is CMYK only; these are
+   the sRGB equivalents — see design/CLAUDE.md ("Brand palette") for the conversion.
+   theme.css maps its roles (--accent, --ink, ...) onto these; don't redefine them there. */
+:root {
+  /* Primary */
+  --flc-green:  #4A864E;  /* PCA Citrus Green (spot) */
+  --flc-orange: #DB9336;  /* PCA Citrus Orange (spot) */
+  --flc-navy:   #424562;
+  /* Secondary */
+  --flc-rust:   #CE6423;
+  --flc-blue:   #2279C2;
+  --flc-teal:   #6DD0B9;
+  --flc-lime:   #A2D052;
+  --flc-sky:    #92CEED;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Barlow', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+h1, h2, h3, p, blockquote, figure { margin: 0; }
+a { text-decoration: none; color: inherit; }
+
+/* Centered ~1180px content column shared by all concepts. */
+.site { max-width: 1180px; margin: 0 auto; }
+
+/* Real photo filling a box the theme sizes (hero, lead photo). Club photos from
+   flickr.com/photos/citruspca, stored in img/. */
+.photo { object-fit: cover; background: #EDECE8; }
+
+/* Image placeholder. Concepts may restyle, but the default keeps mockups readable. */
+.ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px;
+  font: 600 12px 'Barlow', sans-serif;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #8A8A93;
+  background: #EDECE8;
+  border: 1px dashed #C9C7C0;
+}
